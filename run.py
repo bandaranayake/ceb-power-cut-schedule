@@ -38,9 +38,9 @@ def request(accNo):
     url = 'https://cebcare.ceb.lk/Incognito/GetCalendarData?from={0}&to={1}&acctNo={2}'
     cookies, headers = getParams()
     today = datetime.today().strftime('%Y-%m-%d')
-    tomorrow = (datetime.today() + timedelta(days=1)).strftime('%Y-%m-%d')
+    days3 = (datetime.today() + timedelta(days=3)).strftime('%Y-%m-%d')
 
-    return requests.get(url.format(today, tomorrow, accNo), cookies = cookies, headers = headers)
+    return requests.get(url.format(today, days3, accNo), cookies = cookies, headers = headers)
 
 def printInfo(res_json):
     interruptions = res_json['interruptions']
@@ -59,9 +59,9 @@ def printInfo(res_json):
             print('Status:', interruption['status'])
 
             if(interruption['status'] == 'Active'):
-                print(formatMsg(dtEnd - datetime.now(), 'Power will be back in: '))
+                print(formatMsg(dtEnd - datetime.now(), 'Power will be back in '))
             else:
-                print(formatMsg(dtEnd - datetime.now(), 'Next power cut in: '))
+                print(formatMsg(dtEnd - datetime.now(), 'Next power cut in '))
             
             count = count + 1
 
@@ -74,7 +74,7 @@ def main():
     args = parser.parse_args()
 
     res = request(args.acc)
-
+    
     if res.ok:
         printInfo(res.json())
 
